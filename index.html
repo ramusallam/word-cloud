@@ -4,21 +4,109 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Word Cloud</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Roboto+Mono:wght@400;500;700&family=Roboto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --cream: #F0EBE3;
+    --bg: #F7F3EE;
+    --white: #FFFFFF;
+    --ink: #1C1917;
+    --warm: #57534E;
+    --warm-muted: #7C6F5A;
+    --muted-faint: #A0937B;
+    --accent: #6366F1;
+    --accent-hover: #4F46E5;
+    --indigo-2: #818CF8;
+    --indigo-soft: rgba(99,102,241,0.09);
+    --indigo-line: rgba(99,102,241,0.30);
+    --line: #DDD1C3;
+    --line-soft: #F0EBE3;
+    --border: #E8E0D2;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Roboto Serif', Georgia, Cambria, serif;
+    --font-mono: 'Roboto Mono', monospace;
+    --sh-sm: 0 1px 2px rgba(17,17,17,0.05), 0 2px 6px rgba(17,17,17,0.08);
+    --sh-md: 0 4px 12px rgba(17,17,17,0.06), 0 2px 4px rgba(17,17,17,0.04);
+    --sh-lg: 0 16px 40px rgba(17,17,17,0.10), 0 4px 12px rgba(17,17,17,0.06);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  html, body { min-height: 100%; }
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #fbfcfd;
-    color: #2b3440;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--ink);
     line-height: 1.5;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    background: linear-gradient(150deg, #4F46E5 0%, #6366F1 100%);
+    color: #fff;
+    padding: 44px 30px 88px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 2px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+  .hero .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 10px 0 10px;
+    line-height: 1.08;
+  }
+  .hero p {
+    font-size: 1rem;
+    opacity: 0.94;
+    max-width: 560px;
+  }
+  .hero .badges {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .hero .badges span {
+    background: rgba(255,255,255,0.18);
+    padding: 6px 13px;
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .shell {
     display: grid;
-    grid-template-columns: 360px 1fr;
-    min-height: 100vh;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    max-width: 1200px;
+    margin: -56px auto 40px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+    align-items: start;
   }
   @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; }
@@ -26,61 +114,74 @@
 
   /* ==================== SIDEBAR ==================== */
   aside {
-    background: #ffffff;
-    border-right: 1px solid #e9eef2;
-    padding: 24px 22px 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--sh-md);
+    padding: 26px 24px 28px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    overflow-y: auto;
+    gap: 20px;
+    position: sticky;
+    top: 24px;
+  }
+  @media (max-width: 900px) {
+    aside { position: static; }
   }
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #1A6B6B;
+    gap: 11px;
+    font-family: var(--font-serif);
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.2px;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line-soft);
   }
-  .brand svg { flex-shrink: 0; }
+  .brand .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
 
   .block {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
   .block label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: #6b7a87;
+    color: var(--accent);
   }
 
   textarea#text {
     width: 100%;
-    min-height: 220px;
+    min-height: 200px;
     resize: vertical;
-    padding: 12px 14px;
-    font: 0.92rem/1.5 'Segoe UI', Tahoma, sans-serif;
-    color: #2b3440;
-    background: #fbfcfd;
-    border: 1px solid #dce4ea;
-    border-radius: 10px;
+    padding: 14px 16px;
+    font: 15px/1.55 var(--font-sans);
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
     outline: none;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
   }
-  textarea#text:focus {
-    border-color: #2A9D8F;
-    background: #ffffff;
-  }
+  textarea#text::placeholder { color: var(--muted-faint); }
+  textarea#text:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--indigo-soft); }
 
   .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
 
   .ctl {
@@ -89,75 +190,95 @@
     gap: 6px;
   }
   .ctl small {
-    font-size: 0.7rem;
-    color: #8693a0;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
 
   select, input[type="number"], input[type="range"] {
     width: 100%;
-    padding: 9px 10px;
-    font: 0.88rem 'Segoe UI', Tahoma, sans-serif;
-    color: #2b3440;
-    background: #fbfcfd;
-    border: 1px solid #dce4ea;
-    border-radius: 8px;
+    padding: 10px 12px;
+    font: 15px var(--font-sans);
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     outline: none;
     cursor: pointer;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
   }
-  select:focus, input:focus { border-color: #2A9D8F; }
+  select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--indigo-soft); }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%237C6F5A' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+  }
 
   input[type="range"] {
     padding: 0;
     height: 32px;
     cursor: pointer;
+    background: transparent;
+    border: none;
+    accent-color: var(--accent);
   }
+  input[type="range"]:focus { box-shadow: none; }
 
   .toggle-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.88rem;
-    color: #3c4a58;
+    font-size: 14px;
+    color: var(--warm);
     cursor: pointer;
     user-select: none;
   }
-  .toggle-row input { width: auto; cursor: pointer; accent-color: #2A9D8F; }
+  .toggle-row input { width: auto; cursor: pointer; accent-color: var(--accent); }
 
   button.primary {
-    background: linear-gradient(135deg, #2A9D8F 0%, #1A6B6B 100%);
+    background: var(--accent);
     color: white;
     border: none;
-    padding: 12px 18px;
-    font: 700 0.92rem 'Segoe UI', Tahoma, sans-serif;
-    letter-spacing: 0.5px;
-    border-radius: 10px;
+    padding: 14px 20px;
+    font: 700 16px var(--font-sans);
+    border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.12s, box-shadow 0.12s;
-    box-shadow: 0 2px 8px rgba(42, 157, 143, 0.25);
+    box-shadow: var(--sh-sm);
+    transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
   }
-  button.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(42, 157, 143, 0.35); }
+  button.primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--sh-md); }
   button.primary:active { transform: translateY(0); }
 
   button.ghost {
-    background: white;
-    color: #1A6B6B;
-    border: 1px solid #c7d6db;
-    padding: 8px 12px;
-    font: 600 0.84rem 'Segoe UI', Tahoma, sans-serif;
-    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: 9px 15px;
+    font: 600 13.5px var(--font-sans);
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 120ms ease, border-color 120ms ease;
   }
-  button.ghost:hover { background: #f4faf9; border-color: #2A9D8F; }
+  button.ghost:hover { background: #EAE2D4; border-color: var(--line); }
+  button.ghost svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
   .sidebar-foot {
-    margin-top: auto;
-    font-size: 0.72rem;
-    color: #9ba7b2;
-    padding-top: 12px;
-    border-top: 1px solid #eef2f5;
+    margin-top: 2px;
+    font-size: 12.5px;
+    color: var(--warm-muted);
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+    line-height: 1.6;
   }
 
   /* ==================== MAIN ==================== */
@@ -165,46 +286,60 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--sh-md);
+    overflow: hidden;
+    min-height: 560px;
   }
 
   .main-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 24px;
-    background: #ffffff;
-    border-bottom: 1px solid #eef2f5;
-    gap: 12px;
+    padding: 16px 24px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    gap: 14px;
     flex-wrap: wrap;
   }
   .main-bar .stats {
     display: flex;
-    gap: 14px;
-    font-size: 0.82rem;
-    color: #6b7a87;
-    font-weight: 500;
+    gap: 22px;
+  }
+  .main-bar .stats span {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-muted);
   }
   .main-bar .stats b {
-    color: #1A6B6B;
+    color: var(--accent);
+    font-family: var(--font-mono);
     font-weight: 700;
-    margin-right: 4px;
+    font-size: 22px;
+    letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    margin-bottom: 2px;
   }
-  .main-bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .main-bar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
   #stage {
     flex: 1;
     position: relative;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(42, 157, 143, 0.04) 0%, transparent 45%),
-      radial-gradient(circle at 80% 80%, rgba(212, 168, 67, 0.04) 0%, transparent 45%),
-      #fbfcfd;
+    background: var(--bg);
     overflow: hidden;
   }
   #stage svg { display: block; margin: 0 auto; max-width: 100%; }
   #stage text {
     cursor: default;
-    transition: filter 0.15s;
+    transition: filter 120ms ease;
   }
   #stage text:hover {
     filter: brightness(0.85);
@@ -216,81 +351,79 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #b6c1ca;
-    font-size: 1.1rem;
+    color: var(--warm-muted);
+    font-size: 16px;
     pointer-events: none;
     text-align: center;
     padding: 40px;
-    letter-spacing: 0.2px;
   }
   #empty span { font-weight: 500; }
 
   /* ==================== TOOLTIP ==================== */
   #tip {
     position: fixed;
-    background: #1A6B6B;
-    color: white;
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--ink);
     padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
     pointer-events: none;
     opacity: 0;
     transform: translateY(-4px);
-    transition: opacity 0.12s, transform 0.12s;
+    transition: opacity 120ms, transform 120ms;
     z-index: 1000;
     white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.14);
-  }
-  #tip::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    margin-left: -6px;
-    border: 6px solid transparent;
-    border-top-color: #1A6B6B;
-    border-bottom: 0;
+    box-shadow: 0 4px 14px rgba(17,17,17,0.10);
   }
   #tip.show { opacity: 1; transform: translateY(0); }
-  #tip b { font-size: 0.95rem; margin-right: 6px; }
+  #tip b { font-size: 15px; margin-right: 6px; color: var(--accent); font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
   /* ==================== FULLSCREEN ==================== */
-  main:fullscreen { background: #fbfcfd; }
+  main:fullscreen { background: var(--bg); border-radius: 0; border: none; }
   main:fullscreen .main-bar {
     position: absolute;
     top: 16px;
     right: 16px;
     left: 16px;
-    border: none;
-    background: rgba(255,255,255,0.92);
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 10px 18px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 12px 20px;
     z-index: 10;
+    box-shadow: var(--sh-sm);
   }
-  main:fullscreen #stage { padding-top: 60px; }
-
-  /* Hide sidebar when main is fullscreen - main is its own root when fullscreen */
+  main:fullscreen #stage { padding-top: 88px; }
 
   @media (max-width: 900px) {
-    aside { padding: 18px 16px; }
-    .main-bar { padding: 10px 14px; }
+    .hero { padding: 34px 20px 82px; }
+    .hero h1 { font-size: 2rem; }
+    .main-bar { padding: 12px 16px; }
   }
 </style>
 </head>
 <body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Class Tools</div>
+    <h1>Word Cloud</h1>
+    <p>Turn a pile of text into a sized, hoverable word cloud. Paste responses, tune the settings, and export when it looks right.</p>
+    <div class="badges">
+      <span>Frequency sized</span>
+      <span>Live hover counts</span>
+      <span>JPG and PDF export</span>
+    </div>
+  </div>
+</header>
+
 <div class="shell">
 
   <aside>
     <div class="brand">
-      <svg width="26" height="26" viewBox="0 0 40 40">
-        <polygon points="13,2 24,13 13,24 2,13" fill="#2A9D8F" opacity="0.85"/>
-        <polygon points="27,2 38,13 27,24 16,13" fill="#D4A843" opacity="0.85"/>
-        <polygon points="13,16 24,27 13,38 2,27" fill="#E65C3C" opacity="0.85"/>
-        <polygon points="27,16 38,27 27,38 16,27" fill="#7A2D4E" opacity="0.85"/>
-      </svg>
+      <span class="dot"></span>
       Word Cloud
     </div>
 
@@ -312,7 +445,7 @@
       <div class="ctl">
         <small>Palette</small>
         <select id="palette">
-          <option value="teal">Teal</option>
+          <option value="indigo">Indigo</option>
           <option value="ocean">Ocean</option>
           <option value="warm">Warm</option>
           <option value="mono">Mono</option>
@@ -325,10 +458,10 @@
       <div class="ctl">
         <small>Font</small>
         <select id="font">
-          <option value="Segoe UI">Sans</option>
-          <option value="Georgia">Serif</option>
-          <option value="Comfortaa, Segoe UI">Rounded</option>
-          <option value="Courier New">Mono</option>
+          <option value="'Inter', system-ui">Sans</option>
+          <option value="'Roboto Serif', Georgia">Serif</option>
+          <option value="Comfortaa, system-ui">Rounded</option>
+          <option value="'Roboto Mono', monospace">Mono</option>
         </select>
       </div>
       <div class="ctl">
@@ -338,7 +471,7 @@
     </div>
 
     <div class="ctl">
-      <small>Min word frequency: <span id="minCountLabel">1</span></small>
+      <small>Min frequency: <span id="minCountLabel">1</span></small>
       <input type="range" id="minCount" min="1" max="10" value="1">
     </div>
 
@@ -354,20 +487,29 @@
 
     <button class="primary" id="go">Generate cloud</button>
 
-    <div class="sidebar-foot">Hover a word for its count. Click Generate after changing settings.</div>
+    <div class="sidebar-foot">Hover any word to see its count. Click Generate after changing settings.</div>
   </aside>
 
   <main id="main">
     <div class="main-bar">
       <div class="stats">
-        <span><b id="sTotal">0</b>words</span>
-        <span><b id="sUnique">0</b>unique</span>
-        <span><b id="sShown">0</b>shown</span>
+        <span><b id="sTotal">0</b>Words</span>
+        <span><b id="sUnique">0</b>Unique</span>
+        <span><b id="sShown">0</b>Shown</span>
       </div>
       <div class="actions">
-        <button class="ghost" id="fsBtn">Fullscreen</button>
-        <button class="ghost" id="jpgBtn">JPG</button>
-        <button class="ghost" id="pdfBtn">PDF</button>
+        <button class="ghost" id="fsBtn">
+          <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg>
+          <span id="fsLabel">Fullscreen</span>
+        </button>
+        <button class="ghost" id="jpgBtn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          JPG
+        </button>
+        <button class="ghost" id="pdfBtn">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          PDF
+        </button>
       </div>
     </div>
     <div id="stage">
@@ -390,13 +532,13 @@ const STOPWORDS = new Set((
   "a about above after again against all am an and any are aren't as at be because been before being below between both but by can can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further had hadn't has hasn't have haven't having he he'd he'll he's her here here's hers herself him himself his how how's i i'd i'll i'm i've if in into is isn't it it's its itself let's me more most mustn't my myself no nor not of off on once only or other ought our ours ourselves out over own same shan't she she'd she'll she's should shouldn't so some such than that that's the their theirs them themselves then there there's these they they'd they'll they're they've this those through to too under until up very was wasn't we we'd we'll we're we've were weren't what what's when when's where where's which while who who's whom why why's with won't would wouldn't you you'd you'll you're you've your yours yourself yourselves also just like get got one two three really actually thing things way many much even still yet now never always often just"
 ).split(/\s+/));
 
-// ============== PALETTES ==============
+// ============== PALETTES (tuned for a light cream background) ==============
 const PALETTES = {
-  teal:    ["#1A6B6B","#2A9D8F","#3DB8A6","#70C7B9","#a9d6cd"],
-  ocean:   ["#1B3A5C","#2E5C8A","#4681B5","#6FA8D6","#a9c7e0"],
-  warm:    ["#7A2D4E","#b8432a","#E65C3C","#D4A843","#e8c379"],
-  mono:    ["#2b3440","#4e5865","#6b7a87","#8a98a5","#b6c1ca"],
-  rainbow: ["#1A6B6B","#2A9D8F","#D4A843","#E65C3C","#7A2D4E","#2E5C8A"]
+  indigo:  ["#6366f1","#4f46e5","#818cf8","#4338ca","#7c74f0"],
+  ocean:   ["#2563eb","#3b82f6","#0ea5e9","#1d4ed8","#0369a1"],
+  warm:    ["#ea580c","#d97706","#dc2626","#b4791f","#c2410c"],
+  mono:    ["#1c1917","#57534e","#7c6f5a","#3f3b38","#a0937b"],
+  rainbow: ["#6366f1","#16a34a","#d97706","#dc2626","#a855f7","#2563eb"]
 };
 
 // ============== ELEMENTS ==============
@@ -406,7 +548,7 @@ const text=$('text'), layout=$('layout'), palette=$('palette'), font=$('font'),
       removeStopwords=$('removeStopwords'), caseInsensitive=$('caseInsensitive'),
       go=$('go'), stage=$('stage'), empty=$('empty'),
       sTotal=$('sTotal'), sUnique=$('sUnique'), sShown=$('sShown'),
-      fsBtn=$('fsBtn'), jpgBtn=$('jpgBtn'), pdfBtn=$('pdfBtn'),
+      fsBtn=$('fsBtn'), fsLabel=$('fsLabel'), jpgBtn=$('jpgBtn'), pdfBtn=$('pdfBtn'),
       mainEl=$('main'), tip=$('tip');
 
 minCount.addEventListener('input', ()=> minCountLabel.textContent = minCount.value);
@@ -470,7 +612,7 @@ function draw() {
   const minCountVal = arr[arr.length - 1].size;
   const scale = d3.scaleLinear()
     .domain([minCountVal, maxCount])
-    .range([14, 96]);
+    .range([16, 100]);
 
   currentWords = arr.map(w => ({ ...w, count: w.size, size: scale(w.size) }));
 
@@ -481,7 +623,7 @@ function draw() {
   const padding = lay === 'loose' ? 6 : lay === 'tight' ? 1 : 3;
 
   const palKey = palette.value;
-  const pal = PALETTES[palKey] || PALETTES.teal;
+  const pal = PALETTES[palKey] || PALETTES.indigo;
   const fontFam = font.value;
 
   d3.layout.cloud()
@@ -536,7 +678,7 @@ fsBtn.addEventListener('click', () => {
   }
 });
 document.addEventListener('fullscreenchange', () => {
-  fsBtn.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
+  fsLabel.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
   if (currentWords.length) setTimeout(draw, 120);
 });
 
@@ -545,7 +687,7 @@ async function renderCanvas() {
   if (!currentWords.length) return null;
   const node = stage;
   return await html2canvas(node, {
-    backgroundColor: '#fbfcfd',
+    backgroundColor: '#F7F3EE',
     scale: 2,
     logging: false,
     useCORS: true
@@ -578,8 +720,8 @@ pdfBtn.addEventListener('click', async () => {
   pdf.save('word-cloud.pdf');
 });
 
-// ============== STARTER TEXT (helpful default sample) ==============
-text.value = `Paste or type any text here — student responses, a transcript, an essay — and hit Generate.
+// ============== STARTER TEXT ==============
+text.value = `Paste or type any text here, student responses, a transcript, an essay, and hit Generate.
 
 The cloud sizes each word by how often it appears. Hover over any word to see its exact count. Try different layouts, palettes, and fonts. Export as JPG or PDF when it looks how you want.
 
