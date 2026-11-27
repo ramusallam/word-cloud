@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Word Cloud</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Roboto+Mono:wght@400;500;700&family=Roboto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #F0EBE3;
@@ -14,17 +14,18 @@
     --warm: #57534E;
     --warm-muted: #7C6F5A;
     --muted-faint: #A0937B;
-    --accent: #6366F1;
-    --accent-hover: #4F46E5;
+    --accent: #4F46E5;
+    --accent-edge: #6366F1;
+    --accent-hover: #3730A3;
     --indigo-2: #818CF8;
-    --indigo-soft: rgba(99,102,241,0.09);
+    --indigo-soft: #EEF0FF;
     --indigo-line: rgba(99,102,241,0.30);
     --line: #DDD1C3;
     --line-soft: #F0EBE3;
     --border: #E8E0D2;
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-serif: 'Roboto Serif', Georgia, Cambria, serif;
-    --font-mono: 'Roboto Mono', monospace;
+    --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Fraunces', Georgia, Cambria, serif;
+    --font-mono: 'Geist Mono', monospace;
     --sh-sm: 0 1px 2px rgba(17,17,17,0.05), 0 2px 6px rgba(17,17,17,0.08);
     --sh-md: 0 4px 12px rgba(17,17,17,0.06), 0 2px 4px rgba(17,17,17,0.04);
     --sh-lg: 0 16px 40px rgba(17,17,17,0.10), 0 4px 12px rgba(17,17,17,0.06);
@@ -43,109 +44,33 @@
 
   /* ==================== HERO ==================== */
   .hero {
-    background: linear-gradient(150deg, #4F46E5 0%, #6366F1 100%);
-    color: #fff;
-    padding: 44px 30px 88px;
-    position: relative;
-    overflow: hidden;
+    background: radial-gradient(circle at 1px 1px,#ffffff20 1px,transparent 1.5px) 0 0 / 21px 21px,
+      linear-gradient(125deg,#3730A3,#4F46E5);
+    color: white;
+    padding: 18px 0 40px;
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 2px);
-    background-size: 40px 40px;
-    pointer-events: none;
-  }
-  .hero-inner { position: relative; max-width: 1200px; margin: 0 auto; }
-  .hero .kicker {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
-    opacity: 0.9;
-    font-weight: 500;
-  }
-  .hero h1 {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin: 10px 0 10px;
-    line-height: 1.08;
-  }
-  .hero p {
-    font-size: 1rem;
-    opacity: 0.94;
-    max-width: 560px;
-  }
-  .hero .badges {
-    display: flex;
-    gap: 9px;
-    flex-wrap: wrap;
-    margin-top: 18px;
-  }
-  .hero .badges span {
-    background: rgba(255,255,255,0.18);
-    padding: 6px 13px;
-    border-radius: 9999px;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .hero-inner, .shell { width: min(100% - 28px, 1100px); margin-inline: auto; }
+  .hero h1 { font: 600 clamp(26px,5.5vw,39px)/1.06 var(--font-serif); letter-spacing: -.025em; }
 
   .shell {
     display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 24px;
-    max-width: 1200px;
-    margin: -56px auto 40px;
-    padding: 0 24px;
-    position: relative;
-    z-index: 2;
-    align-items: start;
-  }
-  @media (max-width: 900px) {
-    .shell { grid-template-columns: 1fr; }
-  }
-
-  /* ==================== SIDEBAR ==================== */
-  aside {
+    grid-template-columns: minmax(260px, 310px) minmax(0, 1fr);
+    margin-top: -22px;
     background: var(--white);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-top: 4px solid var(--accent-edge);
+    border-radius: 16px;
     box-shadow: var(--sh-md);
-    padding: 26px 24px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: sticky;
-    top: 24px;
+    position: relative;
   }
-  @media (max-width: 900px) {
-    aside { position: static; }
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .brand .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex: none;
+  .editor { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 16px; border-right: 1px solid var(--line-soft); }
+  .settings { border-top: 1px solid var(--line-soft); }
+  .settings summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 600; }
+  .settings-grid { display: grid; gap: 10px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 720px) {
+    .shell { grid-template-columns: minmax(0,1fr); }
+    .editor { border-right: 0; border-bottom: 1px solid var(--line-soft); }
   }
 
   .block {
@@ -156,15 +81,15 @@
   .block label {
     font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.25em;
+    font-weight: 600;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--accent);
   }
 
   textarea#text {
     width: 100%;
-    min-height: 200px;
+    min-height: 126px;
     resize: vertical;
     padding: 14px 16px;
     font: 15px/1.55 var(--font-sans);
@@ -189,19 +114,20 @@
     flex-direction: column;
     gap: 6px;
   }
-  .ctl small {
+  .ctl label {
     font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.25em;
+    font-weight: 600;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--accent);
   }
 
   select, input[type="number"], input[type="range"] {
     width: 100%;
-    padding: 10px 12px;
-    font: 15px var(--font-sans);
+    padding: 8px 10px;
+    min-height: 44px;
+    font: 16px var(--font-sans);
     color: var(--ink);
     background: var(--white);
     border: 1px solid var(--border);
@@ -247,20 +173,20 @@
     color: white;
     border: none;
     padding: 14px 20px;
-    font: 700 16px var(--font-sans);
-    border-radius: 12px;
+    font: 600 16px var(--font-sans);
+    border-radius: 9px;
     cursor: pointer;
     box-shadow: var(--sh-sm);
-    transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+    transition: background 150ms ease;
   }
-  button.primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--sh-md); }
-  button.primary:active { transform: translateY(0); }
+  button.primary:hover { background: var(--accent-hover); }
 
   button.ghost {
-    background: var(--cream);
+    background: var(--white);
     color: var(--ink);
     border: 1px solid var(--border);
-    padding: 9px 15px;
+    min-height: 44px;
+    padding: 8px 12px;
     font: 600 13.5px var(--font-sans);
     border-radius: 10px;
     cursor: pointer;
@@ -269,44 +195,23 @@
     gap: 7px;
     transition: background 120ms ease, border-color 120ms ease;
   }
-  button.ghost:hover { background: #EAE2D4; border-color: var(--line); }
+  button.ghost:hover { background: var(--indigo-soft); border-color: var(--indigo-line); }
+  button.ghost:disabled { opacity: .55; cursor: default; }
   button.ghost svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-  .sidebar-foot {
-    margin-top: 2px;
-    font-size: 12.5px;
-    color: var(--warm-muted);
-    padding-top: 14px;
-    border-top: 1px solid var(--line-soft);
-    line-height: 1.6;
-  }
-
-  /* ==================== MAIN ==================== */
-  main {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    box-shadow: var(--sh-md);
-    overflow: hidden;
-    min-height: 560px;
-  }
-
+  main { min-width: 0; display: flex; flex-direction: column; padding: 0 12px 12px; }
   .main-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px;
+    padding: 10px 0;
     background: var(--white);
-    border-bottom: 1px solid var(--border);
-    gap: 14px;
+    gap: 8px;
     flex-wrap: wrap;
   }
   .main-bar .stats {
     display: flex;
-    gap: 22px;
+    gap: 14px;
   }
   .main-bar .stats span {
     display: flex;
@@ -328,15 +233,18 @@
     line-height: 1.1;
     margin-bottom: 2px;
   }
-  .main-bar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .main-bar .actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
   #stage {
     flex: 1;
     position: relative;
     background: var(--bg);
+    min-height: clamp(235px, 54vh, 480px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
     overflow: hidden;
   }
-  #stage svg { display: block; margin: 0 auto; max-width: 100%; }
+  #stage svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
   #stage text {
     cursor: default;
     transition: filter 120ms ease;
@@ -397,124 +305,111 @@
   }
   main:fullscreen #stage { padding-top: 88px; }
 
-  @media (max-width: 900px) {
-    .hero { padding: 34px 20px 82px; }
-    .hero h1 { font-size: 2rem; }
-    .main-bar { padding: 12px 16px; }
-  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
-<style id="made-by-style">.made-by{text-align:center;font-family:var(--font-mono,"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace);font-size:11px;letter-spacing:.08em;line-height:1.5;color:var(--warm-muted,#7C6F5A);margin:40px auto 24px;padding:0 16px}.made-by a{color:inherit;text-decoration:underline;text-underline-offset:3px}@media print{.made-by{display:none}}</style>
+<style id="made-by-style">.made-by{text-align:center;font-family:var(--font-mono,"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace);font-size:11px;letter-spacing:.08em;line-height:1.5;color:var(--warm-muted,#7C6F5A);margin:40px auto 24px;padding:0 16px}.made-by a{color:inherit;text-decoration:underline;text-underline-offset:3px}@media print{.made-by{display:none}}</style>
 </head>
 <body>
 
 <header class="hero">
   <div class="hero-inner">
-    <div class="kicker">Class Tools</div>
     <h1>Word Cloud</h1>
-    <p>Turn a pile of text into a sized, hoverable word cloud. Paste responses, tune the settings, and export when it looks right.</p>
-    <div class="badges">
-      <span>Frequency sized</span>
-      <span>Live hover counts</span>
-      <span>JPG and PDF export</span>
-    </div>
   </div>
 </header>
 
 <div class="shell">
 
-  <aside>
-    <div class="brand">
-      <span class="dot"></span>
-      Word Cloud
-    </div>
-
+  <section class="editor" aria-label="Word cloud editor">
     <div class="block">
       <label for="text">Paste text</label>
-      <textarea id="text" placeholder="Paste hundreds of words here... responses, essays, transcripts, anything."></textarea>
+      <textarea id="text" placeholder="Paste responses, notes, or a transcript."></textarea>
     </div>
 
-    <div class="row">
-      <div class="ctl">
-        <small>Layout</small>
-        <select id="layout">
-          <option value="rect">Rectangle</option>
-          <option value="circle">Circle</option>
-          <option value="loose">Loose</option>
-          <option value="tight">Tight</option>
-        </select>
+    <button class="primary" id="go" type="button">Generate cloud</button>
+
+    <details class="settings">
+      <summary>Cloud settings</summary>
+      <div class="settings-grid">
+        <div class="row">
+          <div class="ctl">
+            <label for="layout">Layout</label>
+            <select id="layout">
+              <option value="rect">Rectangle</option>
+              <option value="circle">Circle</option>
+              <option value="loose">Loose</option>
+              <option value="tight">Tight</option>
+            </select>
+          </div>
+          <div class="ctl">
+            <label for="palette">Palette</label>
+            <select id="palette">
+              <option value="indigo">Indigo</option>
+              <option value="ocean">Ocean</option>
+              <option value="warm">Warm</option>
+              <option value="mono">Mono</option>
+              <option value="rainbow">Rainbow</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="ctl">
+            <label for="font">Font</label>
+            <select id="font">
+              <option value="'Geist', system-ui">Sans</option>
+              <option value="'Fraunces', Georgia">Serif</option>
+              <option value="Comfortaa, system-ui">Rounded</option>
+              <option value="'Geist Mono', monospace">Mono</option>
+            </select>
+          </div>
+          <div class="ctl">
+            <label for="maxWords">Max words</label>
+            <input type="number" id="maxWords" value="120" min="10" max="400" step="10">
+          </div>
+        </div>
+
+        <div class="ctl">
+          <label for="minCount">Min frequency: <span id="minCountLabel">1</span></label>
+          <input type="range" id="minCount" min="1" max="10" value="1">
+        </div>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="removeStopwords" checked>
+          Remove common words (a, the, and, is...)
+        </label>
+
+        <label class="toggle-row">
+          <input type="checkbox" id="caseInsensitive" checked>
+          Treat "The" and "the" as same word
+        </label>
       </div>
-      <div class="ctl">
-        <small>Palette</small>
-        <select id="palette">
-          <option value="indigo">Indigo</option>
-          <option value="ocean">Ocean</option>
-          <option value="warm">Warm</option>
-          <option value="mono">Mono</option>
-          <option value="rainbow">Rainbow</option>
-        </select>
-      </div>
-    </div>
+    </details>
+  </section>
 
-    <div class="row">
-      <div class="ctl">
-        <small>Font</small>
-        <select id="font">
-          <option value="'Inter', system-ui">Sans</option>
-          <option value="'Roboto Serif', Georgia">Serif</option>
-          <option value="Comfortaa, system-ui">Rounded</option>
-          <option value="'Roboto Mono', monospace">Mono</option>
-        </select>
-      </div>
-      <div class="ctl">
-        <small>Max words</small>
-        <input type="number" id="maxWords" value="120" min="10" max="400" step="10">
-      </div>
-    </div>
-
-    <div class="ctl">
-      <small>Min frequency: <span id="minCountLabel">1</span></small>
-      <input type="range" id="minCount" min="1" max="10" value="1">
-    </div>
-
-    <label class="toggle-row">
-      <input type="checkbox" id="removeStopwords" checked>
-      Remove common words (a, the, and, is...)
-    </label>
-
-    <label class="toggle-row">
-      <input type="checkbox" id="caseInsensitive" checked>
-      Treat "The" and "the" as same word
-    </label>
-
-    <button class="primary" id="go">Generate cloud</button>
-
-    <div class="sidebar-foot">Hover any word to see its count. Click Generate after changing settings.</div>
-  </aside>
-
-  <main id="main">
+  <main id="main" aria-label="Cloud preview">
     <div class="main-bar">
-      <div class="stats">
+      <div class="stats" role="status">
         <span><b id="sTotal">0</b>Words</span>
         <span><b id="sUnique">0</b>Unique</span>
         <span><b id="sShown">0</b>Shown</span>
       </div>
       <div class="actions">
         <button class="ghost" id="fsBtn">
-          <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg>
           <span id="fsLabel">Fullscreen</span>
         </button>
-        <button class="ghost" id="jpgBtn">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <button class="ghost" id="jpgBtn" disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           JPG
         </button>
-        <button class="ghost" id="pdfBtn">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <button class="ghost" id="pdfBtn" disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           PDF
         </button>
       </div>
     </div>
     <div id="stage">
-      <div id="empty"><span>Paste text, hit Generate, and your cloud will appear here.</span></div>
+      <div id="empty"><span>Your word cloud will appear here.</span></div>
     </div>
   </main>
 
@@ -577,9 +472,14 @@ function counts(tokens) {
 }
 
 // ============== DRAW ==============
-let currentWords = [];
+let activeLayout;
+let hasGenerated = false;
 
 function draw() {
+  hasGenerated = true;
+  activeLayout?.stop();
+  jpgBtn.disabled = true;
+  pdfBtn.disabled = true;
   const raw = text.value;
   const tokens = tokenize(raw);
   const map = counts(tokens);
@@ -596,7 +496,7 @@ function draw() {
     .slice(0, maxW)
     .map(([text, size]) => ({ text, size }));
 
-  sShown.textContent = arr.length.toLocaleString();
+  sShown.textContent = "0";
 
   // Clear
   stage.querySelectorAll('svg').forEach(n => n.remove());
@@ -605,22 +505,23 @@ function draw() {
     empty.style.display = 'flex';
     empty.querySelector('span').textContent = raw.trim()
       ? 'No words to show. Try lowering the min frequency.'
-      : 'Paste text, hit Generate, and your cloud will appear here.';
+      : 'Your word cloud will appear here.';
     return;
   }
   empty.style.display = 'none';
 
-  // Scale font size from counts
+  const w = Math.max(1, stage.clientWidth - 4);
+  const h = Math.max(1, stage.clientHeight - 4);
+
+  // Scale font size from counts.
   const maxCount = arr[0].size;
   const minCountVal = arr[arr.length - 1].size;
   const scale = d3.scaleLinear()
     .domain([minCountVal, maxCount])
-    .range([16, 100]);
+    .range([16, Math.min(100, w / 4)]);
 
-  currentWords = arr.map(w => ({ ...w, count: w.size, size: scale(w.size) }));
+  const words = arr.map(w => ({ ...w, count: w.size, size: scale(w.size) }));
 
-  const w = Math.max(400, stage.clientWidth - 40);
-  const h = Math.max(400, stage.clientHeight - 40);
   const lay = layout.value;
   const spiral = lay === 'circle' ? 'archimedean' : 'rectangular';
   const padding = lay === 'loose' ? 6 : lay === 'tight' ? 1 : 3;
@@ -629,25 +530,35 @@ function draw() {
   const pal = PALETTES[palKey] || PALETTES.indigo;
   const fontFam = font.value;
 
-  d3.layout.cloud()
+  activeLayout = d3.layout.cloud()
     .size([w, h])
-    .words(currentWords)
+    .words(words)
     .padding(padding)
     .rotate(() => (Math.random() < 0.25 ? (Math.random() < 0.5 ? -90 : 90) : 0))
     .spiral(spiral)
     .font(fontFam.split(',')[0].trim())
+    .fontWeight('700')
     .fontSize(d => d.size)
     .on('end', drawWords)
     .start();
 
   function drawWords(placed) {
+    sShown.textContent = placed.length.toLocaleString();
+    jpgBtn.disabled = pdfBtn.disabled = !placed.length;
+    if (!placed.length) {
+      empty.style.display = 'flex';
+      empty.querySelector('span').textContent = 'No words fit. Try the Tight layout or fewer words.';
+      return;
+    }
     const svg = d3.select(stage).append('svg')
       .attr('width', w)
       .attr('height', h)
       .attr('viewBox', `0 0 ${w} ${h}`)
-      .attr('id', 'cloudSvg');
+      .attr('id', 'cloudSvg')
+      .attr('role', 'img')
+      .attr('aria-label', placed.map(word => word.text + ': ' + word.count).join(', '));
 
-    const g = svg.append('g').attr('transform', `translate(${w/2},${h/2})`);
+    const g = svg.append('g');
 
     g.selectAll('text')
       .data(placed)
@@ -666,11 +577,15 @@ function draw() {
           tip.classList.add('show');
         })
         .on('mouseleave', () => tip.classList.remove('show'));
+
+    const bounds = g.node().getBBox();
+    const fit = Math.min(1, (w - 24) / bounds.width, (h - 24) / bounds.height);
+    g.attr('transform', `translate(${w / 2},${h / 2}) scale(${fit}) translate(${-bounds.x - bounds.width / 2},${-bounds.y - bounds.height / 2})`);
   }
 }
 
 go.addEventListener('click', draw);
-window.addEventListener('resize', () => { if (currentWords.length) draw(); });
+window.addEventListener('resize', () => { if (hasGenerated) draw(); });
 
 // ============== FULLSCREEN ==============
 fsBtn.addEventListener('click', () => {
@@ -682,12 +597,12 @@ fsBtn.addEventListener('click', () => {
 });
 document.addEventListener('fullscreenchange', () => {
   fsLabel.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Fullscreen';
-  if (currentWords.length) setTimeout(draw, 120);
+  if (hasGenerated) setTimeout(draw, 120);
 });
 
 // ============== EXPORT ==============
 async function renderCanvas() {
-  if (!currentWords.length) return null;
+  if (!stage.querySelector('#cloudSvg')) return null;
   const node = stage;
   return await html2canvas(node, {
     backgroundColor: '#F7F3EE',
@@ -723,12 +638,6 @@ pdfBtn.addEventListener('click', async () => {
   pdf.save('word-cloud.pdf');
 });
 
-// ============== STARTER TEXT ==============
-text.value = `Paste or type any text here, student responses, a transcript, an essay, and hit Generate.
-
-The cloud sizes each word by how often it appears. Hover over any word to see its exact count. Try different layouts, palettes, and fonts. Export as JPG or PDF when it looks how you want.
-
-The cloud handles hundreds to thousands of words. Common words like the, a, and, is, it are filtered out by default. You can turn that off.`;
 </script>
 </body>
 </html>
